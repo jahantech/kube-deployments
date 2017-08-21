@@ -2,6 +2,8 @@
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -13,6 +15,7 @@ public class httpListener {
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/status", new serviceStatus());
         server.createContext("/getdata", new getData());
+        server.createContext("/gethostname", new getHostName());
         server.start();
     }
 
@@ -34,6 +37,31 @@ public class httpListener {
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
             os.close();
+        }
+    }
+    static class getHostName implements HttpHandler {
+        @Override
+        public void handle(HttpExchange t) throws IOException {
+		String hostname = "None";
+                try
+		{
+		    InetAddress addr;
+		    addr = InetAddress.getLocalHost();
+		    hostname = addr.getHostName();
+		    String response = hostname;
+		    t.sendResponseHeaders(200, response.length());
+		    OutputStream os = t.getResponseBody();
+		    os.write(response.getBytes());
+		    os.close();
+		}
+		catch (UnknownHostException ex)
+		{
+		    String response = "unable to find hostname";
+		    t.sendResponseHeaders(200, response.length());
+		    OutputStream os = t.getResponseBody();
+		    os.write(response.getBytes());
+		    os.close();
+		}
         }
     }
 
