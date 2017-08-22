@@ -1,0 +1,55 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: javaredisservice
+spec:
+  selector:
+    app: javaredisservice
+  ports:
+    - protocol: "TCP"
+      port: 8000
+      targetPort: 8000
+  #type: LoadBalancer
+---
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: javaredisservice
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: javaredisservice
+    spec:
+      containers:
+        - name: java
+          image: "java:javaredisservice"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis
+spec:
+  selector:
+    app: redis
+  ports:
+    - protocol: "TCP"
+      port: 8000
+      targetPort: 8000
+  #type: LoadBalancer
+---
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: redis
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: java
+          image: "redis:jstest"
