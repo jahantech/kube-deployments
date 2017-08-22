@@ -44,7 +44,6 @@ apiVersion: apps/v1beta1
 metadata:
   name: redis
 spec:
-  replicas: 3
   template:
     metadata:
       labels:
