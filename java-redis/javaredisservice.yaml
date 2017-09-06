@@ -9,7 +9,7 @@ spec:
     - protocol: "TCP"
       port: 8000
       targetPort: 8000
-  #type: LoadBalancer
+  type: LoadBalancer
 ---
 kind: Deployment
 apiVersion: apps/v1beta1
@@ -35,9 +35,9 @@ spec:
     app: redis
   ports:
     - protocol: "TCP"
-      port: 8000
-      targetPort: 8000
-  #type: LoadBalancer
+      port: 6379
+      targetPort: 6379
+  type: LoadBalancer
 ---
 kind: Deployment
 apiVersion: apps/v1beta1
