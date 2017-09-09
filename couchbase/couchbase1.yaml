@@ -31,6 +31,10 @@ spec:
       protocol: "TCP"
       port: 11210
       targetPort: 11210
+    - name: "cbport6"
+      protocol: "TCP"
+      port: 4369
+      targetPort: 4369
   type: LoadBalancer
 ---
 kind: Deployment
