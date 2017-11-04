@@ -1,0 +1,32 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: gvedis
+spec:
+  selector:
+    app: gvedis
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+---
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: gvedis
+spec:
+  template:
+    metadata:
+      labels:
+        app: gvedis
+    spec:
+      containers:
+        - name: gvedis
+          image: gvedis:0.0.1
+      initContainers:
+      - name: init-myservice
+        image: busybox
+        command: ['sh', '-c', 'until nslookup redis; do echo waiting for myservice; sleep 2; done;telnet redis  <<EOF;SET jahan 1;SET tech 1;EOF;']
+
