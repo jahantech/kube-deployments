@@ -8,4 +8,3 @@ Scheduling:
 Pods of daemonsets are not scheduled by kubernetes scheduler because .spec.nodeName field is specified when the Pod is created so it is ignored by the scheduler
 Communication:
 
-Updating Process:
