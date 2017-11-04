@@ -1,24 +1,32 @@
+---
 kind: Service
 apiVersion: v1
 metadata:
-  name: redis-service
+  name: redis
 spec:
   selector:
-    app: redisPods
+    app: redis
   ports:
-  - protocol: TCP
-    port: 6379
-    targetPort: 6379
+    - protocol: "TCP"
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP
 ---
-apiVersion: v1
-kind: Pod
+kind: Deployment
+apiVersion: apps/v1beta1
 metadata:
   name: redis
-  labels:
-    name: redis
 spec:
-  containers:
-  - name: redis
-    image: redis
-    ports:
-    - containerPort: 6379
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis
+      initContainers:
+      - name: init-myservice
+        image: busybox
+        command: ['sh', '-c', 'until nslookup redis; do echo waiting for myservice; sleep 2; done;telnet redis  <<EOF;SET jahan 1;SET tech 1;EOF;']
+
