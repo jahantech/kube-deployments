@@ -8,9 +8,9 @@ spec:
     app: gvedis
   ports:
     - protocol: "TCP"
-      port: 80
-      targetPort: 80
-  type: ClusterIP
+      port: 8080
+      targetPort: 8080
+  type: NodePort
 ---
 kind: Deployment
 apiVersion: apps/v1beta1
@@ -28,5 +28,5 @@ spec:
       initContainers:
       - name: init-myservice
         image: busybox
-        command: ['sh', '-c', 'until nslookup redis; do echo waiting for myservice; sleep 2; done;telnet redis  <<EOF;SET jahan 1;SET tech 1;EOF;']
+        command: ['sh', '-c', 'until nslookup redis; do echo waiting for redis; sleep 2; done;']
 

@@ -25,8 +25,3 @@ spec:
       containers:
         - name: redis
           image: redis
-      initContainers:
-      - name: init-myservice
-        image: busybox
-        command: ['sh', '-c', 'until nslookup redis; do echo waiting for myservice; sleep 2; done;telnet redis  <<EOF;SET jahan 1;SET tech 1;EOF;']
-
