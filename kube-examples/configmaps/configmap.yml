@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  main-script.sh: |
+   #!/bin/bash
+   echo ${JAHANS_ENV_VAR}
+   sleep 600 
+  myvalue: "Test"
