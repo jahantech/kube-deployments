@@ -18,7 +18,8 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
 EOF
 setenforce 0
 yum install -y kubelet kubeadm kubectl
-systemctl enable kubelet && systemctl start kubelet```
+systemctl enable kubelet && systemctl start kubelet 
+```
 
 Lets try to initialize the k8s cluster
 
@@ -34,5 +35,4 @@ Lets try to initialize the k8s cluster
         /proc/sys/net/bridge/bridge-nf-call-iptables contents are not set to 1
 [preflight] If you know what you are doing, you can skip pre-flight checks with `--skip-preflight-checks`
 ```
-
 
