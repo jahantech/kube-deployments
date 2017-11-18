@@ -61,7 +61,7 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 ```
 
-Lets get kubeadm to work!
+###### Lets get kubeadm to work!
 
 ```
 [root@k8s-master-1 ~]# kubeadm init                                                                                       
@@ -120,7 +120,7 @@ as root:
 
 ```
 
-Looks like we have a k8s master!
+###### Looks like we have a k8s master!
 
 Wo Wo Wo ... kubectl doesnot work!
 ```
@@ -134,7 +134,7 @@ The connection to the server localhost:8080 was refused - did you specify the ri
 [root@k8s-master-1 ~]# sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ```
-Its working!!
+###### Its working!!
 ```
 [root@k8s-master-1 ~]# kubectl get pods 
 No resources found.
@@ -148,13 +148,13 @@ kube-proxy-pzw56                       1/1       Running   0          6m
 kube-scheduler-k8s-master-1            1/1       Running   0          5m
 ```
 
-# Worker Node 
-Install docker on the worker node
+## Worker Node 
+###### Install docker on the worker node
 ```
 sudo yum install docker -y
 ```
 
-Join the cluster!!! 
+###### Join the cluster!!! 
 ```
 [root@k8s-worker-1 ~]# kubeadm join --token b20d79.470dc56d52ed4710 192.168.1.113:6443
 [kubeadm] WARNING: kubeadm is in beta, please do not use it for production clusters.
@@ -177,14 +177,14 @@ Node join complete:
 Run 'kubectl get nodes' on the master to see this machine join.
 ```
 
-Lets see the if the worker has actually joined the cluster:
+###### Lets see the if the worker has actually joined the cluster:
 ```
 [root@k8s-master-1 ~]# kubectl get nodes
 NAME           STATUS     ROLES     AGE       VERSION
 k8s-master-1   NotReady   master    15m       v1.8.3
 k8s-worker-1   NotReady   <none>    4m        v1.8.3
 ```
-Time to apply the pod network manifest, in this example I have chosen weave: 
+###### Time to apply the pod network manifest, in this example I have chosen weave: 
 ```
 [root@k8s-master-1 ~]# kubectl apply -f https://git.io/weave-kube-1.6
 serviceaccount "weave-net" created
