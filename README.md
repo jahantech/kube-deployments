@@ -86,4 +86,70 @@ Lets get kubeadm to work!
 [etcd] Wrote Static Pod manifest for a local etcd instance to "/etc/kubernetes/manifests/etcd.yaml"
 [init] Waiting for the kubelet to boot up the control plane as Static Pods from directory "/etc/kubernetes/manifests"
 [init] This often takes around a minute; or longer if the control plane images have to be pulled.
+[uploadconfig] Storing the configuration used in ConfigMap "kubeadm-config" in the "kube-system" Namespace        [0/1777]
+[markmaster] Will mark node k8s-master-1 as master by adding a label and a taint
+[markmaster] Master k8s-master-1 tainted and labelled with key/value: node-role.kubernetes.io/master=""
+[bootstraptoken] Using token: d6f610.18971c6b916a9ffb
+[bootstraptoken] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term ce$tificate credentials
+[bootstraptoken] Configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstr$p Token
+[bootstraptoken] Configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstraptoken] Creating the "cluster-info" ConfigMap in the "kube-public" namespace
+[addons] Applied essential addon: kube-dns
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes master has initialized successfully!
+
+To start using your cluster, you need to run (as a regular user):
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  http://kubernetes.io/docs/admin/addons/
+
+You can now join any number of machines by running the following on each node
+as root:
+
+  kubeadm join --token d6f610.18971c6b916a9ffb 10.0.3.15:6443 --discovery-token-ca-cert-hash sha256:5e8191be284392c695e4d$
+62a26d5203554db550281cc77a3fdbca9de90e56a9
+
 ```
+
+Looks like we have a k8s master!
+
+Wo Wo Wo ... kubectl doesnot work!
+```
+[root@k8s-master-1 ~]# kubectl get pods
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+```
+Lets copy k8s admin config to the home folder for your user:
+```
+[root@k8s-master-1 ~]# mkdir -p $HOME/.kube
+[root@k8s-master-1 ~]# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+[root@k8s-master-1 ~]# sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+```
+Its working!!
+```
+[root@k8s-master-1 ~]# kubectl get pods 
+No resources found.
+[root@k8s-master-1 ~]# kubectl get pods -n kube-system
+NAME                                   READY     STATUS    RESTARTS   AGE
+etcd-k8s-master-1                      1/1       Running   4          5m
+kube-apiserver-k8s-master-1            1/1       Running   2          5m
+kube-controller-manager-k8s-master-1   1/1       Running   0          5m
+kube-dns-545bc4bfd4-hbxgq              0/3       Pending   0          6m
+kube-proxy-pzw56                       1/1       Running   0          6m
+kube-scheduler-k8s-master-1            1/1       Running   0          5m
+```
+Lets look back at what kubeadm actually did for us: 
+
+## Docker Images
+
+## Docker Running Containers
+
+## Kubernetes config 
+
+## kubectl test
