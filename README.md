@@ -4,7 +4,10 @@ My k8s deployment configs for various setups
 # k8s cluster with kubeadm
 ## Master Node
 OS: CentOS 7 
-
+## Install docker on the master
+```
+sudo yum install docker -y
+```
 ## Install kuebadm on the master node
 ``` 
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -143,4 +146,41 @@ kube-controller-manager-k8s-master-1   1/1       Running   0          5m
 kube-dns-545bc4bfd4-hbxgq              0/3       Pending   0          6m
 kube-proxy-pzw56                       1/1       Running   0          6m
 kube-scheduler-k8s-master-1            1/1       Running   0          5m
+```
+
+# Worker Node 
+Install docker on the worker node
+```
+sudo yum install docker -y
+```
+
+Join the cluster!!! 
+```
+[root@k8s-worker-1 ~]# kubeadm join --token b20d79.470dc56d52ed4710 192.168.1.113:6443
+[kubeadm] WARNING: kubeadm is in beta, please do not use it for production clusters.
+[preflight] Running pre-flight checks
+[preflight] WARNING: docker service is not enabled, please run 'systemctl enable docker.service'
+[validation] WARNING: using token-based discovery without DiscoveryTokenCACertHashes can be unsafe (see https://kubernetes.io/docs/admin/kubeadm/#kubeadm-join).
+[validation] WARNING: Pass --discovery-token-unsafe-skip-ca-verification to disable this warning. This warning will become an error in Kubernetes 1.9.
+[discovery] Trying to connect to API Server "192.168.1.113:6443"
+[discovery] Created cluster-info discovery client, requesting info from "https://192.168.1.113:6443"
+[discovery] Cluster info signature and contents are valid and no TLS pinning was specified, will use API Server "192.168.1.113:6443"
+[discovery] Successfully established connection with API Server "192.168.1.113:6443"
+[bootstrap] Detected server version: v1.8.3
+[bootstrap] The server supports the Certificates API (certificates.k8s.io/v1beta1)
+
+Node join complete:
+* Certificate signing request sent to master and response
+  received.
+* Kubelet informed of new secure connection details.
+
+Run 'kubectl get nodes' on the master to see this machine join.
+```
+
+Lets see the if the worker has actually joined the cluster:
+```
+[root@k8s-master-1 ~]# kubectl get nodes
+NAME           STATUS     ROLES     AGE       VERSION
+k8s-master-1   NotReady   master    15m       v1.8.3
+k8s-worker-1   NotReady   <none>    4m        v1.8.3
 ```
