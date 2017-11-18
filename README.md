@@ -5,7 +5,7 @@ My k8s deployment configs for various setups
 ## Master Node
 OS: CentOS 7 
 
-Install kuebadm on the master node
+## Install kuebadm on the master node
 ``` 
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -144,12 +144,3 @@ kube-dns-545bc4bfd4-hbxgq              0/3       Pending   0          6m
 kube-proxy-pzw56                       1/1       Running   0          6m
 kube-scheduler-k8s-master-1            1/1       Running   0          5m
 ```
-Lets look back at what kubeadm actually did for us: 
-
-## Docker Images
-
-## Docker Running Containers
-
-## Kubernetes config 
-
-## kubectl test
