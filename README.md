@@ -184,3 +184,15 @@ NAME           STATUS     ROLES     AGE       VERSION
 k8s-master-1   NotReady   master    15m       v1.8.3
 k8s-worker-1   NotReady   <none>    4m        v1.8.3
 ```
+Time to apply the pod network manifest, in this example I have chosen weave: 
+```
+[root@k8s-master-1 ~]# kubectl apply -f https://git.io/weave-kube-1.6
+serviceaccount "weave-net" created
+clusterrole "weave-net" created
+clusterrolebinding "weave-net" created
+role "weave-net-kube-peer" created
+rolebinding "weave-net-kube-peer" created
+daemonset "weave-net" created
+[root@k8s-master-1 ~]# 
+```
+
