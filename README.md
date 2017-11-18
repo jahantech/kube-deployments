@@ -1,14 +1,14 @@
 # kube-deployments
 My k8s deployment configs for various setups
 
-# k8s cluster with kubeadm
-## Master Node
+## k8s cluster with kubeadm
+### Master Node
 OS: CentOS 7 
-## Install docker on the master
+###### Install docker on the master
 ```
 sudo yum install docker -y
 ```
-## Install kuebadm on the master node
+###### Install kuebadm on the master node
 ``` 
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -24,7 +24,7 @@ yum install -y kubelet kubeadm kubectl
 systemctl enable kubelet && systemctl start kubelet 
 ```
 
-Lets try to initialize the k8s cluster
+###### Lets try to initialize the k8s cluster
 
 ```
 [root@k8s-master-1 ~]# kubeadm init 
@@ -38,7 +38,7 @@ Lets try to initialize the k8s cluster
         /proc/sys/net/bridge/bridge-nf-call-iptables contents are not set to 1
 [preflight] If you know what you are doing, you can skip pre-flight checks with `--skip-preflight-checks`
 ```
-So preflight checks failed, we need to open ports in firewalld:
+###### So preflight checks failed, we need to open ports in firewalld:
 ```
 [root@k8s-master-1 ~]# firewall-cmd --zone=public --add-port=6443/tcp --permanent
 success
@@ -47,14 +47,14 @@ success
 [root@k8s-master-1 ~]# firewall-cmd --reload
 success
 ```
-Lets turn the swap off and make sure fstab has no entries for swap: 
+###### Lets turn the swap off and make sure fstab has no entries for swap: 
 ```
 [root@k8s-master-1 ~]# swapoff -a 
 [root@k8s-master-1 etc]# cat fstab 
 /dev/mapper/centos-root /                       xfs     defaults        0 0
 UUID=6a16b235-1bd6-4cfc-8a25-69ea8adf4708 /boot                   xfs     defaults        0 0
 ````
-Update sysctl conf file for bridge-nf-call-iptables:
+###### Update sysctl conf file for bridge-nf-call-iptables:
 ```
 [root@k8s-master-1 ~]# cat /etc/sysctl.conf 
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -127,7 +127,7 @@ Wo Wo Wo ... kubectl doesnot work!
 [root@k8s-master-1 ~]# kubectl get pods
 The connection to the server localhost:8080 was refused - did you specify the right host or port?
 ```
-Lets copy k8s admin config to the home folder for your user:
+###### Lets copy k8s admin config to the home folder for your user:
 ```
 [root@k8s-master-1 ~]# mkdir -p $HOME/.kube
 [root@k8s-master-1 ~]# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
