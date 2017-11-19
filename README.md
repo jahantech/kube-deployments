@@ -38,14 +38,10 @@ systemctl enable kubelet && systemctl start kubelet
         /proc/sys/net/bridge/bridge-nf-call-iptables contents are not set to 1
 [preflight] If you know what you are doing, you can skip pre-flight checks with `--skip-preflight-checks`
 ```
-###### So preflight checks failed, we need to open ports in firewalld:
+###### So preflight checks failed, currently firewalld is not compatible with kubernetes so disable it:
 ```
-[root@k8s-master-1 ~]# firewall-cmd --zone=public --add-port=6443/tcp --permanent
-success
-[root@k8s-master-1 ~]# firewall-cmd --zone=public --add-port=10250/tcp --permanent
-success
-[root@k8s-master-1 ~]# firewall-cmd --reload
-success
+systemctl disable firewalld 
+reboot
 ```
 ###### Lets turn the swap off and make sure fstab has no entries for swap: 
 ```
@@ -69,7 +65,6 @@ net.bridge.bridge-nf-call-iptables = 1
 [init] Using Kubernetes version: v1.8.3
 [init] Using Authorization modes: [Node RBAC]
 [preflight] Running pre-flight checks
-[preflight] WARNING: firewalld is active, please ensure ports [6443 10250] are open or your cluster may not function correctly
 [kubeadm] WARNING: starting in 1.8, tokens expire after 24 hours by default (if you require a non-expiring token use --token-ttl 0)
 [certificates] Generated ca certificate and key.
 [certificates] Generated apiserver certificate and key.
@@ -198,11 +193,7 @@ daemonset "weave-net" created
 ###### Oh we are not done yet, no .. no 
 Did you notice the kube-dns pods stuck in the CreatingContainer state? 
 
-That is because there is no pod networking setup between master and worker. The weave pods are running but they will not be able contact eachother because on each port firewall rules doesn't exist to allow the communication. To resolve the issue, run the following on master and worker: 
-```
-firewall-cmd --zone=public --add-port=6783/tcp --permanent
-firewall-cmd --reload
-```
+That is because there is no pod networking setup between master and worker. The weave pods are running but they will not be able contact eachother because on each port firewall rules doesn't exist to allow the communication. To resolve the issue, make sure te port 6783 is accessible on all the machine within the network.
 # WIP 
 ###### What did the kubeadm actually did for us? 
 
