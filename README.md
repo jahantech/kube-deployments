@@ -195,4 +195,36 @@ rolebinding "weave-net-kube-peer" created
 daemonset "weave-net" created
 [root@k8s-master-1 ~]# 
 ```
+###### Oh we are not done yet, no .. no 
+Did you notice the kube-dns pods stuck in the CreatingContainer state? 
+
+That is because there is no pod networking setup between master and worker. The weave pods are running but they will not be able contact eachother because on each port firewall rules doesn't exist to allow the communication. To resolve the issue, run the following on master and worker: 
+```
+firewall-cmd --zone=public --add-port=6783/tcp --permanent
+firewall-cmd --reload
+```
+# WIP 
+###### What did the kubeadm actually did for us? 
+
+###### What are those docker images?
+
+###### What are the main components of Master node? 
+
+###### What are the main components of Worker node? 
+
+###### Why we have to install network addon like weave or calico?
+
+##### Service DNS .. How does that even work? 
+
+##### Pods DNS .. Does that even exist? 
+
+##### What services/resources have DNS names?
+
+##### Are DNS names stored in etcd?
+
+##### Why worker nodes cannot function without etcd? 
+
+##### How do we restore etcd? 
+
+##### How do we query it?
 
